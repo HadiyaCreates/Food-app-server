@@ -2,7 +2,8 @@
 const mongoose = require('mongoose');
 const Food = require('./models/Food');
 
-mongoose.connect('mongodb+srv://hadiyashaikh2006:edns8W4JPnAoH19D@cluster0.c9qwmwm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+require('dotenv').config();
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
