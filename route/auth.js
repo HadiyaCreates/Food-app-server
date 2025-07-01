@@ -5,21 +5,142 @@ const User = require("../models/User");
 
 const router = express.Router();
 
-router.post("/signup", async (req, res) => {
-    const { name, email, password } = req.body;
+// router.post("/signup", async (req, res) => {
+//     const { name, email, password } = req.body;
     
-    try {
-        const existingUser = await User.findOne({ email });
-        if (existingUser) return res.status(400).json({ message: "Email already exist" });
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ name, email, password: hashedPassword });
+//     try {
+//         const existingUser = await User.findOne({ email });
+//         if (existingUser) return res.status(400).json({ message: "Email already exist" });
+//         const hashedPassword = await bcrypt.hash(password, 10);
+//         // const newUser = new User({ name, email, password: hashedPassword,   profileImage: undefined });
+// const defaultImage = "https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_1280.png";
+// const newUser = new User({
+//   name,
+//   email,
+//   password: hashedPassword,
+//   profileImage: defaultImage, // 👈 this is the fix
+// });
+//     // await newUser.save();
+//     // res.status(201).json({ message: "Signup successful", user: { name, email } });
+//     await newUser.save();
+// res.status(201).json({ message: "Signup successful", user: newUser });
+//   } catch (error) {
+//     res.status(500).json({ message: "Something went wrong" });
+//   }
+// });
 
-    await newUser.save();
-    res.status(201).json({ message: "Signup successful", user: { name, email } });
+// // router.post("/signup", async (req, res) => {
+// //   const { name, email, password } = req.body;
+
+// //   try {
+// //     const existingUser = await User.findOne({ email });
+// //     if (existingUser) return res.status(400).json({ message: "Email already exist" });
+
+// //     const hashedPassword = await bcrypt.hash(password, 10);
+
+// //     // const defaultImage = "https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_1280.png";
+// //     // const newUser = new User({
+// //     //   name,
+// //     //   email,
+// //     //   password: hashedPassword,
+// //     //   profileImage: defaultImage,
+// //     // });
+// //     const defaultImage = "https://www.pngmart.com/files/23/Profile-PNG-Photo.png";
+// // const newUser = new User({
+// //   name,
+// //   email,
+// //   password: hashedPassword,
+// //   profileImage: defaultImage, // <-- Always set this
+// // });
+
+// //     await newUser.save();
+// //     // res.status(201).json({ message: "Signup successful", user: newUser });
+// //     res.status(201).json({
+// //   message: "Signup successful",
+// //   user: {
+// //     _id: newUser._id,
+// //     name: newUser.name,
+// //     email: newUser.email,
+// //     profileImage: newUser.profileImage,
+// //   },
+// // });
+
+// //   } catch (error) {
+// //     res.status(500).json({ message: "Something went wrong" });
+// //   }
+// // });
+// // SIGNUP ROUTE
+// // backend/routes/auth.js
+// router.post("/signup", async (req, res) => {
+//   const { name, email, password } = req.body;
+
+//   try {
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) return res.status(400).json({ message: "Email already exists" });
+
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     const defaultImage = "https://www.pngmart.com/files/23/Profile-PNG-Photo.png";
+//     const newUser = new User({
+//       name,
+//       email,
+//       password: hashedPassword,
+//       profileImage: defaultImage,
+//     });
+
+//     const savedUser = await newUser.save();
+
+//     res.status(201).json({
+//       message: "Signup successful",
+//       user: {
+//         _id: savedUser._id|| "68611e091ca488db23e60422",
+//         name: savedUser.name,
+//         email: savedUser.email,
+//         profileImage: savedUser.profileImage,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("❌ Error during signup:", error);
+//     res.status(500).json({ message: "Something went wrong" });
+//   }
+// });
+// backend/routes/auth.js
+router.post("/signup", async (req, res) => {
+  const { name, email, password } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) return res.status(400).json({ message: "Email already exists" });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const defaultImage = "https://www.pngmart.com/files/23/Profile-PNG-Photo.png";
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      profileImage: defaultImage,
+    });
+
+    const savedUser = await newUser.save();
+
+    res.status(201).json({
+      message: "Signup successful",
+      user: {
+        _id: savedUser._id,
+        name: savedUser.name,
+        email: savedUser.email,
+        profileImage: savedUser.profileImage,
+      },
+    });
   } catch (error) {
+    console.error("❌ Error during signup:", error);
     res.status(500).json({ message: "Something went wrong" });
   }
 });
+
+
+
 
 
 router.post("/login", async (req, res) => {
