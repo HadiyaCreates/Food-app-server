@@ -2,7 +2,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
-
+const admin = require("../firebaseAdmin");
 const router = express.Router();
 
 // router.post("/signup", async (req, res) => {
@@ -140,7 +140,41 @@ router.post("/signup", async (req, res) => {
 });
 
 
+// Google Login Route
+router.post("/google-login", async (req, res) => {
+  const { idToken } = req.body;
 
+  try {
+    const decoded = await admin.auth().verifyIdToken(idToken);
+
+    const { email, name, picture } = decoded;
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Create user if not exists
+      user = new User({
+        name,
+        email,
+        password: "", // No password for Google
+        profileImage: picture || "https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_1280.png",
+      });
+      await user.save();
+    }
+
+    res.status(200).json({
+      message: "Google login successful",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        profileImage: user.profileImage,
+      },
+    });
+  } catch (error) {
+    console.error("❌ Google Login Error:", error);
+    res.status(401).json({ message: "Unauthorized - Invalid ID token" });
+  }
+});
 
 
 router.post("/login", async (req, res) => {
