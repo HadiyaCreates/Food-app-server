@@ -114,7 +114,7 @@ router.post("/signup", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const defaultImage = "https://www.pngmart.com/files/23/Profile-PNG-Photo.png";
+    const defaultImage = "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_1280.png";
     const newUser = new User({
       name,
       email,
@@ -156,7 +156,7 @@ router.post("/google-login", async (req, res) => {
         name,
         email,
         password: "", // No password for Google
-        profileImage: picture || "https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_1280.png",
+        profileImage: picture || "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_1280.png",
       });
       await user.save();
     }
